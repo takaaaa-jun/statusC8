@@ -22,11 +22,11 @@ export default function Normal(){
         </div>
         {isClicked && (
         <div>
-            <ul className="list-none border text-red-600">
-                <li>助けて</li>
-                <li>助けて</li>
-                <li>助けて</li>
-                <li>助けて</li>
+            <ul className="list-none border">
+                <li>Karotter</li>
+                <li>トモコレ</li>
+                <li>ONICHA</li>
+                <li>おじさん構文</li>
             </ul>
         </div>
         )}
