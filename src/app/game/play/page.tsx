@@ -1,6 +1,7 @@
 "use client";
 
-import { useMemo, useState, Image } from "react";
+import Image from "next/image";
+import { useMemo, useState } from "react";
 import type { ComponentType } from "react";
 
 import { Button } from "@/components/ui/button";
@@ -196,7 +197,12 @@ export default function GamePlayPage() {
       <div className="mx-auto w-full max-w-4xl px-4 py-8">
         {/* タイトル画像 */}
         <div className="mb-8 flex justify-center">
-          <Image src="/titlelogo.png" alt="Title Logo" />
+          <Image
+            src="/titlelogo.png"
+            alt="Title Logo"
+            width={360}
+            height={120}
+          />
         </div>
 
         {/* ゲーム本体の表示エリア */}
