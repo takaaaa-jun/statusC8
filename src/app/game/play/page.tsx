@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 import type { ComponentType } from "react";
 
@@ -16,15 +17,17 @@ import Q01Normal from "@/feature/game/questions/q01/normal";
 import Q01AnomalyA from "@/feature/game/questions/q01/anomaly-a";
 import Q01AnomalyB from "@/feature/game/questions/q01/anomaly-b";
 
-import { NormalFormQ02 } from "@/feature/game/questions/q02/normal";
-import { Q02AnomalyA } from "@/feature/game/questions/q02/anomaly-a";
-import { Q2AnomalyB } from "@/feature/game/questions/q02/anomaly-b";
+import Q02Normal from "@/feature/game/questions/q02/normal";
+import Q02AnomalyA from "@/feature/game/questions/q02/anomaly-a";
+import Q02AnomalyB from "@/feature/game/questions/q02/anomaly-b";
 
+import Q03Normal from "@/feature/game/questions/q03/normal";
 import Q03AnomalyA from "@/feature/game/questions/q03/anomaly-a";
+import Q03AnomalyB from "@/feature/game/questions/q03/anomaly-b";
 
-import { NormalFormQ04 } from "@/feature/game/questions/q04/normal";
-import { Q04AnomalyA } from "@/feature/game/questions/q04/anomaly-a";
-import { Q04AnomalyB } from "@/feature/game/questions/q04/anomaly-b";
+import Q04Normal from "@/feature/game/questions/q04/normal";
+import Q04AnomalyA from "@/feature/game/questions/q04/anomaly-a";
+import Q04AnomalyB from "@/feature/game/questions/q04/anomaly-b";
 
 import Q05Normal from "@/feature/game/questions/q05/normal";
 import Q05AnomalyA from "@/feature/game/questions/q05/anomaly-a";
@@ -66,15 +69,17 @@ const QUESTION_COMPONENTS: Record<
     "anomaly-b": Q01AnomalyB,
   },
   q02: {
-    normal: NormalFormQ02,
+    normal: Q02Normal,
     "anomaly-a": Q02AnomalyA,
-    "anomaly-b": Q2AnomalyB,
+    "anomaly-b": Q02AnomalyB,
   },
   q03: {
+    normal: Q03Normal,
     "anomaly-a": Q03AnomalyA,
+    "anomaly-b": Q03AnomalyB,
   },
   q04: {
-    normal: NormalFormQ04,
+    normal: Q04Normal,
     "anomaly-a": Q04AnomalyA,
     "anomaly-b": Q04AnomalyB,
   },
@@ -91,6 +96,8 @@ const QUESTION_COMPONENTS: Record<
 };
 
 export default function GamePlayPage() {
+  const router = useRouter();
+
   // API 通信中かどうかを管理する
   const [isLoadingStart, setIsLoadingStart] = useState(false);
   const [isLoadingAnswer, setIsLoadingAnswer] = useState(false);
@@ -182,7 +189,13 @@ export default function GamePlayPage() {
       }
 
       await response.json();
+      const nextQuestion = await loadNextQuestion();
 
+      // cnt が 9 に達したら結果画面へ遷移する
+      if (nextQuestion && nextQuestion.progressCount >= 9) {
+        router.push("/game/result");
+        return;
+      }
       // 回答結果は画面に残さず、そのまま次の問題へ進む
       await loadNextQuestion();
     } catch (error) {
