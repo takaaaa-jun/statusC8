@@ -7,7 +7,7 @@ export function judgeAnswer({
   hasAnomaly,
   action,
   currentCount,
-  goalCount = 8,
+  goalCount = 9,
 }: JudgeAnswerParams): JudgeAnswerResult {
   const isCorrect =
     (hasAnomaly && action === "turn-back") ||

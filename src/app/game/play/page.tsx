@@ -1,12 +1,12 @@
 "use client";
 
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 import type { ComponentType } from "react";
 
 import { Button } from "@/components/ui/button";
 import type {
+  AnswerResponse,
   PlayerAction,
   QuestionId,
   StartGameResponse,
@@ -41,6 +41,9 @@ const ACTION_LABELS: Record<PlayerAction, string> = {
   advance: "進む",
   "turn-back": "引き返す",
 };
+
+const VISIBLE_CNT_MAX = 8;
+const CLEAR_CNT = 9;
 
 // API から返る questionId / variant に応じて、実際の問題コンポーネントを表示する
 function MissingQuestion(props: { questionId: QuestionId; variant: Variant }) {
@@ -96,8 +99,6 @@ const QUESTION_COMPONENTS: Record<
 };
 
 export default function GamePlayPage() {
-  const router = useRouter();
-
   // API 通信中かどうかを管理する
   const [isLoadingStart, setIsLoadingStart] = useState(false);
   const [isLoadingAnswer, setIsLoadingAnswer] = useState(false);
@@ -107,6 +108,8 @@ export default function GamePlayPage() {
   // 現在の問題を保持する
   const [currentQuestion, setCurrentQuestion] =
     useState<StartGameResponse | null>(null);
+  const progressCount = currentQuestion?.progressCount ?? 0;
+  const visibleCnt = Math.min(progressCount, VISIBLE_CNT_MAX);
 
   // 問題が表示されているかどうかをまとめて扱う
   const hasQuestion = currentQuestion !== null;
@@ -188,16 +191,24 @@ export default function GamePlayPage() {
         throw new Error(errorData.message || "回答送信に失敗しました");
       }
 
-      await response.json();
-      const nextQuestion = await loadNextQuestion();
+      const answerResult = (await response.json()) as AnswerResponse;
 
-      // cnt が 9 に達したら結果画面へ遷移する
-      if (nextQuestion && nextQuestion.progressCount >= 9) {
-        router.push("/game/result");
+      if (answerResult.isGameClear || answerResult.progressCount >= CLEAR_CNT) {
+        window.location.assign(
+          `/game/result?cnt=${answerResult.progressCount}`,
+        );
         return;
       }
-      // 回答結果は画面に残さず、そのまま次の問題へ進む
-      await loadNextQuestion();
+
+      const nextQuestion = await loadNextQuestion();
+
+      // cnt は 8 まで表示し、9 到達でクリア扱いにする
+      if (nextQuestion && nextQuestion.progressCount >= CLEAR_CNT) {
+        window.location.assign(
+          `/game/result?cnt=${nextQuestion.progressCount}`,
+        );
+        return;
+      }
     } catch (error) {
       setErrorMessage(error instanceof Error ? error.message : "不明なエラー");
     } finally {
@@ -207,6 +218,28 @@ export default function GamePlayPage() {
 
   return (
     <main className="min-h-screen bg-black text-white">
+      <aside className="fixed top-4 left-4 z-50 rounded-2xl border-2 border-white bg-black/95 p-3 shadow-[0_10px_30px_rgba(0,0,0,0.5)] backdrop-blur sm:top-6 sm:left-6 sm:p-4">
+        <p className="text-[10px] font-bold tracking-[0.25em] text-white/80 sm:text-xs">
+          CNT
+        </p>
+        <div className="mt-1 flex items-end gap-2">
+          <span className="font-mono text-3xl leading-none font-black tracking-wider text-white tabular-nums sm:text-4xl">
+            {visibleCnt.toString().padStart(2, "0")}
+          </span>
+          <span className="mb-0.5 text-xs font-semibold text-white/70 sm:text-sm">
+            / 08
+          </span>
+        </div>
+        <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-white/20">
+          <div
+            className="h-full rounded-full bg-white transition-all duration-300"
+            style={{
+              width: `${Math.min((visibleCnt / VISIBLE_CNT_MAX) * 100, 100)}%`,
+            }}
+          />
+        </div>
+      </aside>
+
       <div className="mx-auto w-full max-w-4xl px-4 py-8">
         {/* タイトル画像 */}
         <div className="mb-8 flex justify-center">
@@ -221,10 +254,6 @@ export default function GamePlayPage() {
         {/* ゲーム本体の表示エリア */}
         <section className="rounded-2xl border border-white/10 bg-white/5 p-6 shadow-xl">
           <div className="relative text-center">
-            {/* 左上に現在の cnt を表示する */}
-            <div className="absolute top-0 left-0 text-sm text-white/70">
-              cnt: {currentQuestion?.progressCount ?? 0}
-            </div>
             <h1 className="text-3xl font-semibold">Are you ready?</h1>
             <p className="mt-2 text-sm text-white/70">
               異変を見つけたら引き返す。異変がなければ進む。
