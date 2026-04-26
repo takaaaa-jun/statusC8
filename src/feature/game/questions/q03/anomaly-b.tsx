@@ -16,7 +16,7 @@ export const Q03AnomalyB = () => {
     do {
       randomIndex = Math.floor(Math.random() * options.length);
     } while (randomIndex === clickedIndex && options.length > 1);
-    
+
     setSelectedIndex(randomIndex);
 
     // 2. 選択肢を増殖させる
@@ -40,11 +40,10 @@ export const Q03AnomalyB = () => {
           <div
             key={opt.id}
             onClick={(e) => handleClick(e, index)}
-            className={`flex items-center p-4 border-2 transition-all cursor-pointer ${
-              selectedIndex === index
-                ? "border-red-600 bg-red-100 shadow-[4px_4px_0px_0px_rgba(220,38,38,1)]"
-                : "border-gray-200 bg-white hover:border-black"
-            }`}
+            className={`flex items-center p-4 border-2 transition-all cursor-pointer ${selectedIndex === index
+              ? "border-red-600 bg-red-100 shadow-[4px_4px_0px_0px_rgba(220,38,38,1)]"
+              : "border-gray-200 bg-white hover:border-black"
+              }`}
           >
             <input
               type="radio"
@@ -61,3 +60,5 @@ export const Q03AnomalyB = () => {
     </div>
   );
 };
+
+export default Q03AnomalyB;

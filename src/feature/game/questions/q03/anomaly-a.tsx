@@ -3,7 +3,7 @@ import React, { useState } from "react";
 export const Q03AnomalyA = () => {
   const [gender, setGender] = useState("");
 
-  
+
   const options = [
     { label: "0x0045F2A1", value: "male" },
     { label: "0x0045F2A2", value: "female" },
@@ -20,11 +20,10 @@ export const Q03AnomalyA = () => {
         {options.map((opt) => (
           <label
             key={opt.value}
-            className={`flex items-center p-4 border-2 cursor-pointer transition-all ${
-              gender === opt.value
+            className={`flex items-center p-4 border-2 cursor-pointer transition-all ${gender === opt.value
                 ? "border-black bg-gray-100"
                 : "border-gray-200 hover:border-gray-400 bg-white"
-            }`}
+              }`}
           >
             <input
               type="radio"
@@ -42,3 +41,5 @@ export const Q03AnomalyA = () => {
     </div>
   );
 };
+
+export default Q03AnomalyA;
