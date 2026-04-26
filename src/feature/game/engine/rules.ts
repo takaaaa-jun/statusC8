@@ -1,5 +1,5 @@
 // プレイヤーの選択
-export type PlayerAction = "advance" | "turn-back";
+import type { PlayerAction } from "../types";
 
 type JudgeAnswerParams = {
   hasAnomaly: boolean; // 今のページに異変があるか
