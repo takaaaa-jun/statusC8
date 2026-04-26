@@ -1,13 +1,4 @@
-import type { QuestionId, Variant } from "../types";
-
-// pickNextQuestion が返す結果の型
-type PickNextQuestionResult = {
-  questionId: QuestionId; // 今回選ばれた問題ID
-  variant: Variant; // 今回選ばれた表示パターン
-  hasAnomaly: boolean; // 異変ありかどうか（normal 以外なら true）
-  nextUsedQuestionIds: QuestionId[]; // 次回用に更新された使用済み問題一覧
-  didReset: boolean; // 問題を使い切って一覧をリセットしたか
-};
+import type { PickNextQuestionResult, QuestionId, Variant } from "../types";
 
 // 問題プール（ここを増やすと問題数を増やせる）
 const QUESTION_IDS: QuestionId[] = ["q01", "q02", "q03", "q04", "q05", "q06"];
