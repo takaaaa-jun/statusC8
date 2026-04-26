@@ -1,8 +1,4 @@
-// 問題IDの型（この中の値しか使えない）
-export type QuestionId = "q01" | "q02" | "q03" | "q04" | "q05" | "q06";
-
-// 問題の状態（正常 or 異変）
-export type Variant = "normal" | "anomaly-a" | "anomaly-b";
+import type { QuestionId, Variant } from "../types";
 
 // pickNextQuestion が返す結果の型
 type PickNextQuestionResult = {
