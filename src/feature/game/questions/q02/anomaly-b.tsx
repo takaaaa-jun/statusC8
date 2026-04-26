@@ -27,3 +27,5 @@ export const Q2AnomalyB = () => {
     </div>
   );
 };
+
+export default Q2AnomalyB;

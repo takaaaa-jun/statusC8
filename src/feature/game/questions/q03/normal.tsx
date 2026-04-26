@@ -19,11 +19,10 @@ export const NormalFormQ03 = () => {
         {options.map((opt) => (
           <label
             key={opt.value}
-            className={`flex items-center p-4 border-2 cursor-pointer transition-all duration-200 ${
-              gender === opt.value
+            className={`flex items-center p-4 border-2 cursor-pointer transition-all duration-200 ${gender === opt.value
                 ? "border-black bg-gray-100 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
                 : "border-gray-200 hover:border-gray-400 bg-white"
-            }`}
+              }`}
           >
             <input
               type="radio"
@@ -42,3 +41,5 @@ export const NormalFormQ03 = () => {
     </div>
   );
 };
+
+export default NormalFormQ03;

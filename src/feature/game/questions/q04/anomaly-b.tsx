@@ -55,3 +55,5 @@ export const Q04AnomalyB = () => {
     </div>
   );
 };
+
+export default Q04AnomalyB;
