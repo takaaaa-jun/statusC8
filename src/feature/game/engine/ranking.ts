@@ -3,40 +3,64 @@
  */
 export class RankingManager {
     private static STORAGE_KEY = 'status_c8_timer_start';
+    private static NAME_KEY = 'status_c8_player_name';
 
     /**
      * 計測を開始します。
-     * ブラウザのlocalStorageに現在時刻を保存します。
+     * @param playerName プレイヤー名
      */
-    static startTimer(): void {
+    static startTimer(playerName: string): void {
         if (typeof window !== 'undefined') {
             localStorage.setItem(this.STORAGE_KEY, Date.now().toString());
+            localStorage.setItem(this.NAME_KEY, playerName);
         }
     }
 
     /**
-     * 計測を停止し、開始時からの経過時間（ミリ秒）を取得します。
-     * @returns 経過時間（ミリ秒）。開始時刻が取得できない場合はnull。
+     * 現在の経過時間（ミリ秒）を取得します。
+     * プレイ中にリアルタイムで表示するために使用します。
      */
-    static stopTimer(): number | null {
+    static getElapsedMs(): number | null {
         if (typeof window !== 'undefined') {
             const startTimeStr = localStorage.getItem(this.STORAGE_KEY);
             if (!startTimeStr) return null;
+            return Date.now() - parseInt(startTimeStr, 10);
+        }
+        return null;
+    }
 
-            const startTime = parseInt(startTimeStr, 10);
-            const endTime = Date.now();
+    /**
+     * 保存されているプレイヤー名を取得します。
+     */
+    static getPlayerName(): string {
+        if (typeof window !== 'undefined') {
+            return localStorage.getItem(this.NAME_KEY) || 'Guest';
+        }
+        return 'Guest';
+    }
 
-            // 次の計測のためにクリア
+    /**
+     * 計測を停止し、結果（名前とタイム）を返してからクリアします。
+     */
+    static stopTimer(): { playerName: string, timeMs: number } | null {
+        if (typeof window !== 'undefined') {
+            const startTimeStr = localStorage.getItem(this.STORAGE_KEY);
+            const playerName = this.getPlayerName();
+            if (!startTimeStr) return null;
+
+            const timeMs = Date.now() - parseInt(startTimeStr, 10);
+
+            // データのクリア
             localStorage.removeItem(this.STORAGE_KEY);
+            localStorage.removeItem(this.NAME_KEY);
 
-            return endTime - startTime;
+            return { playerName, timeMs };
         }
         return null;
     }
 
     /**
      * ミリ秒を読みやすい形式（分:秒.ミリ秒）に変換します。
-     * @param ms 経過時間（ミリ秒）
      */
     static formatTime(ms: number): string {
         const minutes = Math.floor(ms / 60000);
@@ -48,14 +72,8 @@ export class RankingManager {
 
     /**
      * ランキングにスコアを登録します。
-     * 将来的にデータベース（Prismaなど）への保存ロジックを追加する場所です。
-     * @param playerName プレイヤー名
-     * @param clearTimeMs クリアタイム（ミリ秒）
      */
     static async submitScore(playerName: string, clearTimeMs: number): Promise<void> {
-        // TODO: ここにDB保存ロジックを実装
         console.log(`[Ranking] スコア登録: ${playerName}, タイム: ${this.formatTime(clearTimeMs)}`);
-
-        // 例: await prisma.ranking.create({ data: { name: playerName, time: clearTimeMs } });
     }
 }
