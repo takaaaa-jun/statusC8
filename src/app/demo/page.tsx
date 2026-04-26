@@ -29,6 +29,13 @@ export default function DemoHubPage() {
                                 <span>問題プレビュー (q01-q06)</span>
                             </Button>
                         </Link>
+
+                        <Link href="/demo/result">
+                            <Button className="w-full h-24 text-lg flex flex-col gap-2 bg-green-600 hover:bg-green-700">
+                                <span>🏁</span>
+                                <span>Result画面テスト</span>
+                            </Button>
+                        </Link>
                     </div>
                 </div>
 
