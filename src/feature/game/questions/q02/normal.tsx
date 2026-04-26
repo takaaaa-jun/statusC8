@@ -39,3 +39,5 @@ export const NormalFormQ02 = () => {
     </div>
   );
 };
+
+export default NormalFormQ02;
