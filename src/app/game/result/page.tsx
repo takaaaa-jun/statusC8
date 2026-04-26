@@ -34,7 +34,7 @@ export default function ResultPage(){
                         <User size={18} />
                         <span className="text-[10px] font-bold uppercase tracking-widest">User</span>
                         </div>
-                    <   span className="text-lg font-bold">{userData.name}</span>
+                    <span className="text-lg font-bold">{userData.name}</span>
                     </div>
 
                     {/* タイム */}
