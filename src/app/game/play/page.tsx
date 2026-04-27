@@ -1,8 +1,9 @@
 "use client";
 
 import Image from "next/image";
+import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import type { ComponentType } from "react";
 
 import { Button } from "@/components/ui/button";
@@ -13,30 +14,6 @@ import type {
   StartGameResponse,
   Variant,
 } from "@/feature/game/types";
-
-import Q01Normal from "@/feature/game/questions/q01/normal";
-import Q01AnomalyA from "@/feature/game/questions/q01/anomaly-a";
-import Q01AnomalyB from "@/feature/game/questions/q01/anomaly-b";
-
-import Q02Normal from "@/feature/game/questions/q02/normal";
-import Q02AnomalyA from "@/feature/game/questions/q02/anomaly-a";
-import Q02AnomalyB from "@/feature/game/questions/q02/anomaly-b";
-
-import Q03Normal from "@/feature/game/questions/q03/normal";
-import Q03AnomalyA from "@/feature/game/questions/q03/anomaly-a";
-import Q03AnomalyB from "@/feature/game/questions/q03/anomaly-b";
-
-import Q04Normal from "@/feature/game/questions/q04/normal";
-import Q04AnomalyA from "@/feature/game/questions/q04/anomaly-a";
-import Q04AnomalyB from "@/feature/game/questions/q04/anomaly-b";
-
-import Q05Normal from "@/feature/game/questions/q05/normal";
-import Q05AnomalyA from "@/feature/game/questions/q05/anomaly-a";
-import Q05AnomalyB from "@/feature/game/questions/q05/anomaly-b";
-
-import Q06Normal from "@/feature/game/questions/q06/normal";
-import Q06AnomalyA from "@/feature/game/questions/q06/anomaly-a";
-import Q06AnomalyB from "@/feature/game/questions/q06/anomaly-b";
 
 const ACTION_LABELS: Record<PlayerAction, string> = {
   advance: "進む",
@@ -63,39 +40,117 @@ function MissingQuestion(props: { questionId: QuestionId; variant: Variant }) {
 
 type QuestionComponent = ComponentType;
 
+const QuestionLoading = () => (
+  <div className="rounded-xl border border-white/10 bg-white p-4 text-center text-sm text-black/70">
+    問題を読み込み中...
+  </div>
+);
+
 const QUESTION_COMPONENTS: Record<
   QuestionId,
-  Partial<Record<Variant, QuestionComponent>>
+  Record<Variant, QuestionComponent>
 > = {
   q01: {
-    normal: Q01Normal,
-    "anomaly-a": Q01AnomalyA,
-    "anomaly-b": Q01AnomalyB,
+    normal: dynamic(() => import("@/feature/game/questions/q01/normal"), {
+      loading: QuestionLoading,
+    }),
+    "anomaly-a": dynamic(
+      () => import("@/feature/game/questions/q01/anomaly-a"),
+      {
+        loading: QuestionLoading,
+      },
+    ),
+    "anomaly-b": dynamic(
+      () => import("@/feature/game/questions/q01/anomaly-b"),
+      {
+        loading: QuestionLoading,
+      },
+    ),
   },
   q02: {
-    normal: Q02Normal,
-    "anomaly-a": Q02AnomalyA,
-    "anomaly-b": Q02AnomalyB,
+    normal: dynamic(() => import("@/feature/game/questions/q02/normal"), {
+      loading: QuestionLoading,
+    }),
+    "anomaly-a": dynamic(
+      () => import("@/feature/game/questions/q02/anomaly-a"),
+      {
+        loading: QuestionLoading,
+      },
+    ),
+    "anomaly-b": dynamic(
+      () => import("@/feature/game/questions/q02/anomaly-b"),
+      {
+        loading: QuestionLoading,
+      },
+    ),
   },
   q03: {
-    normal: Q03Normal,
-    "anomaly-a": Q03AnomalyA,
-    "anomaly-b": Q03AnomalyB,
+    normal: dynamic(() => import("@/feature/game/questions/q03/normal"), {
+      loading: QuestionLoading,
+    }),
+    "anomaly-a": dynamic(
+      () => import("@/feature/game/questions/q03/anomaly-a"),
+      {
+        loading: QuestionLoading,
+      },
+    ),
+    "anomaly-b": dynamic(
+      () => import("@/feature/game/questions/q03/anomaly-b"),
+      {
+        loading: QuestionLoading,
+      },
+    ),
   },
   q04: {
-    normal: Q04Normal,
-    "anomaly-a": Q04AnomalyA,
-    "anomaly-b": Q04AnomalyB,
+    normal: dynamic(() => import("@/feature/game/questions/q04/normal"), {
+      loading: QuestionLoading,
+    }),
+    "anomaly-a": dynamic(
+      () => import("@/feature/game/questions/q04/anomaly-a"),
+      {
+        loading: QuestionLoading,
+      },
+    ),
+    "anomaly-b": dynamic(
+      () => import("@/feature/game/questions/q04/anomaly-b"),
+      {
+        loading: QuestionLoading,
+      },
+    ),
   },
   q05: {
-    normal: Q05Normal,
-    "anomaly-a": Q05AnomalyA,
-    "anomaly-b": Q05AnomalyB,
+    normal: dynamic(() => import("@/feature/game/questions/q05/normal"), {
+      loading: QuestionLoading,
+    }),
+    "anomaly-a": dynamic(
+      () => import("@/feature/game/questions/q05/anomaly-a"),
+      {
+        loading: QuestionLoading,
+      },
+    ),
+    "anomaly-b": dynamic(
+      () => import("@/feature/game/questions/q05/anomaly-b"),
+      {
+        loading: QuestionLoading,
+      },
+    ),
   },
   q06: {
-    normal: Q06Normal,
-    "anomaly-a": Q06AnomalyA,
-    "anomaly-b": Q06AnomalyB,
+    normal: dynamic(() => import("@/feature/game/questions/q06/normal"), {
+      loading: QuestionLoading,
+    }),
+    "anomaly-a": dynamic(
+      () => import("@/feature/game/questions/q06/anomaly-a"),
+      {
+        loading: QuestionLoading,
+      },
+    ),
+    "anomaly-b": dynamic(
+      () => import("@/feature/game/questions/q06/anomaly-b"),
+      {
+        loading: QuestionLoading,
+      },
+    ),
   },
 };
 
@@ -119,24 +174,9 @@ export default function GamePlayPage() {
   // start / answer のどちらかが動いている間は操作を止める
   const isBusy = isLoadingStart || isLoadingAnswer || isResetting;
 
-  // questionId と variant から、対応する問題コンポーネントを選ぶ
-  const QuestionView = useMemo(() => {
-    if (!currentQuestion) return null;
-
-    const questionMap = QUESTION_COMPONENTS[currentQuestion.questionId];
-    const Selected = questionMap?.[currentQuestion.variant];
-
-    if (!Selected) {
-      return (
-        <MissingQuestion
-          questionId={currentQuestion.questionId}
-          variant={currentQuestion.variant}
-        />
-      );
-    }
-
-    return <Selected />;
-  }, [currentQuestion]);
+  const SelectedQuestionView = currentQuestion
+    ? QUESTION_COMPONENTS[currentQuestion.questionId]?.[currentQuestion.variant]
+    : null;
 
   // サーバーに次の問題を要求して、そのまま表示する
   const loadNextQuestion = async () => {
@@ -311,7 +351,14 @@ export default function GamePlayPage() {
           {/* currentQuestion があるときだけ、実際の問題コンポーネントを描画する */}
           {hasQuestion && (
             <div className="mt-6 rounded-xl border border-white/10 bg-white p-4 text-black">
-              {QuestionView}
+              {SelectedQuestionView && currentQuestion ? (
+                <SelectedQuestionView />
+              ) : currentQuestion ? (
+                <MissingQuestion
+                  questionId={currentQuestion.questionId}
+                  variant={currentQuestion.variant}
+                />
+              ) : null}
             </div>
           )}
 
