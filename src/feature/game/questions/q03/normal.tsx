@@ -1,45 +1,50 @@
-import React, { useState } from "react";
+import {
+  Field,
+  FieldContent,
+  FieldDescription,
+  FieldLabel,
+  FieldTitle,
+} from "@/components/ui/field"
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 
-export const NormalFormQ03 = () => {
-  const [gender, setGender] = useState("");
-
-  const options = [
-    { label: "男性", value: "male" },
-    { label: "女性", value: "female" },
-    { label: "回答しない", value: "prefer_not_to_say" },
-  ];
-
+export default function RadioGroupChoiceCard() {
   return (
-    <div className="space-y-6 text-black">
-      <h2 className="text-xl font-black border-b-4 border-black pb-2 mb-6 italic uppercase tracking-tighter">
-        Q3. 性別を選択してください
-      </h2>
-
-      <div className="flex flex-col gap-3">
-        {options.map((opt) => (
-          <label
-            key={opt.value}
-            className={`flex items-center p-4 border-2 cursor-pointer transition-all duration-200 ${gender === opt.value
-                ? "border-black bg-gray-100 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
-                : "border-gray-200 hover:border-gray-400 bg-white"
-              }`}
-          >
-            <input
-              type="radio"
-              name="gender"
-              value={opt.value}
-              checked={gender === opt.value}
-              onChange={() => setGender(opt.value)}
-              className="w-5 h-5 accent-black cursor-pointer"
-            />
-            <span className="ml-4 text-base font-bold tracking-wider">
-              {opt.label}
-            </span>
-          </label>
-        ))}
-      </div>
+    <main>
+    <div className="text-center pb-4">
+      <h4>性別を選択してください。</h4>
     </div>
-  );
-};
+      
+    <div className="flex justify-center">
+    <RadioGroup className="max-w-sm">
 
-export default NormalFormQ03;
+      <FieldLabel>     
+        <Field orientation="horizontal">
+          <RadioGroupItem value="male" className="border-slate-400" />
+          <FieldContent>
+            <FieldTitle>男性</FieldTitle>
+          </FieldContent>
+        </Field>
+      </FieldLabel>
+
+      <FieldLabel>
+        <Field orientation="horizontal">
+          <RadioGroupItem value="female" className="border-slate-400" />
+          <FieldContent>
+            <FieldTitle>女性</FieldTitle>
+          </FieldContent>
+        </Field>
+      </FieldLabel>
+
+      <FieldLabel htmlFor="plus-plan">
+        <Field orientation="horizontal">
+          <RadioGroupItem value="secret" className="border-slate-400" />
+          <FieldContent>
+            <FieldTitle>回答しない</FieldTitle>
+          </FieldContent>
+        </Field>
+      </FieldLabel>
+    </RadioGroup>
+    </div>
+    </main>
+  )
+}

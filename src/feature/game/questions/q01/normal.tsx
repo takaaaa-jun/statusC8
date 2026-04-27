@@ -26,7 +26,6 @@ export default function Normal(){
                 <li>Karotter</li>
                 <li>トモコレ</li>
                 <li>ONICHA</li>
-                <li>おじさん構文</li>
             </ul>
         </div>
         )}
