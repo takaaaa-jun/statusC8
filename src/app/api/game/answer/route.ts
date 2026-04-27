@@ -2,16 +2,16 @@ import { cookies } from "next/headers";
 
 import { judgeAnswer } from "@/feature/game/engine/rules";
 import {
-  getOrCreateGameSession,
-  patchGameSession,
+  issueSignedGameSessionToken,
+  readSignedGameSessionToken,
+  SESSION_COOKIE_NAME,
+  updateSignedGameSession,
 } from "@/feature/game/state/session";
 import type {
   AnswerRequestBody,
   AnswerResponse,
   PlayerAction,
 } from "@/feature/game/types";
-
-const SESSION_COOKIE_NAME = "game_session_id";
 
 // action の文字列が許可値かを判定
 function isPlayerAction(value: string): value is PlayerAction {
@@ -28,14 +28,20 @@ export async function GET() {
 export async function POST(request: Request) {
   // cookie からセッションを特定
   const cookieStore = await cookies();
-  const sessionIdFromCookie = cookieStore.get(SESSION_COOKIE_NAME)?.value;
+  const tokenFromCookie = cookieStore.get(SESSION_COOKIE_NAME)?.value;
 
-  if (!sessionIdFromCookie) {
+  if (!tokenFromCookie) {
     return Response.json({ message: "Session not found" }, { status: 400 });
   }
 
   // セッションを復元
-  const session = getOrCreateGameSession(sessionIdFromCookie);
+  const session = readSignedGameSessionToken(tokenFromCookie);
+  if (!session) {
+    return Response.json(
+      { message: "Session expired or invalid. Please start again." },
+      { status: 400 },
+    );
+  }
 
   // 先に start を呼んでいない場合は回答できない
   if (!session.currentQuestion) {
@@ -67,12 +73,21 @@ export async function POST(request: Request) {
   });
 
   // 判定結果をセッションに反映（回答後は currentQuestion をクリア）
-  const updatedSession = patchGameSession(session.sessionId, {
+  const updatedSession = updateSignedGameSession(session, {
     progressCount: result.nextCount,
     usedQuestionIds: result.shouldResetQuestionPool
       ? []
       : session.usedQuestionIds,
     currentQuestion: null,
+  });
+
+  const signedToken = issueSignedGameSessionToken(updatedSession);
+  cookieStore.set(SESSION_COOKIE_NAME, signedToken, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    path: "/",
+    maxAge: 60 * 60 * 6,
   });
 
   // フロント向けの回答結果レスポンス

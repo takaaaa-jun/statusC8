@@ -1,8 +1,6 @@
 import { cookies } from "next/headers";
 
-import { removeGameSession } from "@/feature/game/state/session";
-
-const SESSION_COOKIE_NAME = "game_session_id";
+import { SESSION_COOKIE_NAME } from "@/feature/game/state/session";
 
 export async function GET() {
   return Response.json({
@@ -12,11 +10,6 @@ export async function GET() {
 
 export async function POST() {
   const cookieStore = await cookies();
-  const sessionIdFromCookie = cookieStore.get(SESSION_COOKIE_NAME)?.value;
-
-  if (sessionIdFromCookie) {
-    removeGameSession(sessionIdFromCookie);
-  }
 
   cookieStore.delete(SESSION_COOKIE_NAME);
 
