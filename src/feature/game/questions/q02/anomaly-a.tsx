@@ -1,33 +1,49 @@
-// src/feature/game/questions/q02/anomaly-a.tsx
-import React from "react";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 
-export const Q02AnomalyA = () => {
-  const prefecturesArabic = [
-    "هوكايدو", "أوموري", "إيواتي", "مياغي", "أكيتا", "ياغاتا", "فوكوشيما",
-    "إيباراكي", "توتشيغي", "غونما", "سايتاما", "تشيبا", "طوكيو", "كاناغاوا",
-    "نييغاتا", "توياما", "إيشيكاوا", "فوكوي", "ياماناشي", "ناغانو", "غيفو",
-    "شيزوكا", "آيتشي", "ميي", "شيغا", "كيوتو", "أوساكا", "هيوغو",
-    "نارا", "واكاياما", "توتوري", "شيماني", "أوكاياما", "هيروشيما", "ياماغوتشي",
-    "توكوشيما", "كاغاوا", "إيهيمي", "كوتشي", "فوكوكا", "ساغا", "ناغاساكي",
-    "كوماموتو", "أويتا", "ميازاكي", "كاغوشيما", "أوكيناوا"
-  ];
+export default function q02() {
 
-  return (
-    <div className="space-y-6">
-      <h2 className="text-xl font-black border-b-4 border-black pb-2 mb-4 italic">
-        Q2. 現住所を選択してください
-      </h2>
-      <select
-        className="w-full border-2 border-gray-300 p-3 bg-gray-50 text-black"
-        defaultValue=""
-      >
-        <option value="" disabled>都道府県を選択してください</option>
-        {prefecturesArabic.map((pref) => (
-          <option key={pref} value={pref}>{pref}</option>
-        ))}
-      </select>
-    </div>
-  );
+  const PREFECTURES_BY_REGION = {
+  "هوكايدو وتوهوكو": ["هوكايدو", "آوموري", "إيواتيه", "مياغي", "أكيتا", "ياماغاتا", "فوكوشيما"],
+  "كانتو": ["إيباراكي", "توتشيغي", "غونما", "سايتاما", "تشيبا", "طوكيو", "كاناغاوا"],
+  "تشوبو": ["نييغاتا", "توياما", "إيشيكاوا", "فوكوي", "ياماناشي", "ناغانو", "غيفو", "شيزوكا", "آيتشي"],
+  "كينكي": ["مييه", "شيغا", "كيوتو", "أوساكا", "هيوغو", "نارا", "واكاياما"],
+  "تشوغوكو وشيكوكو": ["توتوري", "شيمانيه", "أوكاياما", "هيروشيما", "ياماغوتشي", "توكوشيما", "كاغاوا", "إهيميه", "كوتشي"],
+  "كيوشو وأوكيناوا": ["فوكوكا", "ساغا", "ناغاساكي", "كوماموتو", "أويتا", "ميازاكي", "كاغوشيما", "أوكيناوا"],
 };
 
-export default Q02AnomalyA;
+  return (
+    <main>
+    <div className="text-center pb-4">
+        <h4>都道府県を選択してください。</h4>
+    </div>
+
+    <div className="flex justify-center">
+    <Select>
+      <SelectTrigger className="w-full max-w-64">
+        <SelectValue placeholder="選択してください" />
+      </SelectTrigger>
+      <SelectContent>
+        {Object.entries(PREFECTURES_BY_REGION).map(([region, prefs]) => (
+          <SelectGroup key={region}>
+          <SelectLabel>{region}</SelectLabel>
+          {prefs.map((pref) => (
+            <SelectItem key={pref} value={pref}>
+              {pref}
+            </SelectItem>
+        ))}
+      </SelectGroup>
+      ))}
+      </SelectContent>
+    </Select>
+    </div>
+    </main>
+  )
+}

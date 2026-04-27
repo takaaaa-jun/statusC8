@@ -1,34 +1,49 @@
-// src/feature/game/questions/q02/anomaly-a.tsx
-import React from "react";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 
-export const Q2AnomalyB = () => {
-  // すべてひらがなの都道府県リスト
-  const prefecturesHiragana = [
-    "ほっかいどう", "あおもりけん", "いわてけん", "みやぎけん", "あきたけん", "やまがたけん", "ふくしまけん",
-    "いばらきけん", "とちぎけん", "ぐんまけん", "さいたまけん", "ちばけん", "とうきょうと", "かながわけん",
-    "にいがたけん", "とやまけん", "いしかわけん", "ふくいけん", "やまなしけん", "ながのけん", "ぎふけん",
-    "しずおかけん", "あいちけん", "みえけん", "しがけん", "きょうとふ", "おおさかふ", "ひょうごけん",
-    "ならけん", "わかやまけん", "とっとりけん", "しまねけん", "おかやまけん", "ひろしまけん", "やまぐちけん",
-    "とくしまけん", "かがわけん", "えひめけん", "こうちけん", "ふくおかけん", "さがけん", "ながさきけん",
-    "くまもとけん", "おおいたけん", "みやざきけん", "かごしまけん", "おきなわけん"
-  ];
+export default function q02() {
+
+  const PREFECTURES_BY_REGION = {
+    "ほっかいどー・とーほく": ["ほっかいどー", "あおもりけん", "いわてけん", "みやぎけん", "あきたけん", "やまがたけん", "ふくしまけん"],
+    "かんとー": ["いばらきけん", "とちぎけん", "ぐんまけん", "さいたまけん", "ちばけん", "とーきょーと", "かながわけん"],
+    "ちゅーぶ": ["にーがたけん", "とやまけん", "いしかわけん", "ふくいけん", "やまなしけん", "ながのけん", "ぎふけん", "しずおかけん", "あいちけん"],
+    "きんき": ["みえけん", "しがけん", "きょーとふ", "おーさかふ", "ひょーごけん", "ならけん", "わかやまけん"],
+    "ちゅーごく・しこく": ["とっとりけん", "しまねけん", "おかやまけん", "ひろしまけん", "やまぐちけん", "とくしまけん", "かがわけん", "えひめけん", "こーちけん"],
+    "九州・沖縄": ["ふくおかけん", "さがけん", "ながさきけん", "くまもとけん", "おーいたけん", "みやざきけん", "かごしまけん", "おきなわけん"],
+  };
 
   return (
-    <div className="space-y-6">
-      <h2 className="text-xl font-black border-b-4 border-black pb-2 mb-4 italic">
-        Q2. 現住所を選択してください
-      </h2>
-      <select
-        className="w-full border-2 border-gray-300 p-3 bg-gray-50 text-black"
-        defaultValue=""
-      >
-        <option value="" disabled>都道府県を選択してください</option>
-        {prefecturesHiragana.map((pref) => (
-          <option key={pref} value={pref}>{pref}</option>
-        ))}
-      </select>
+    <main>
+    <div className="text-center pb-4">
+        <h4>都道府県を選択してください。</h4>
     </div>
-  );
-};
 
-export default Q2AnomalyB;
+    <div className="flex justify-center">
+    <Select>
+      <SelectTrigger className="w-full max-w-64">
+        <SelectValue placeholder="選択してください" />
+      </SelectTrigger>
+      <SelectContent>
+        {Object.entries(PREFECTURES_BY_REGION).map(([region, prefs]) => (
+          <SelectGroup key={region}>
+          <SelectLabel>{region}</SelectLabel>
+          {prefs.map((pref) => (
+            <SelectItem key={pref} value={pref}>
+              {pref}
+            </SelectItem>
+        ))}
+      </SelectGroup>
+      ))}
+      </SelectContent>
+    </Select>
+    </div>
+    </main>
+  )
+}

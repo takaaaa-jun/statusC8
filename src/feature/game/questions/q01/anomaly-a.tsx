@@ -26,7 +26,6 @@ export default function Normal(){
                 <li>助けて</li>
                 <li>助けて</li>
                 <li>助けて</li>
-                <li>助けて</li>
             </ul>
         </div>
         )}
