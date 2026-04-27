@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
-const questionIds = ["q01", "q02", "q03", "q04", "q05", "q06"];
+const questionIds = ["q01", "q02", "q03", "q04", "q05", "q06", "q07"];
 
 export default function QuestionsHubPage() {
     return (

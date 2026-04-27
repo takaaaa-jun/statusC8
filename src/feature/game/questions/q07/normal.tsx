@@ -70,3 +70,5 @@ export const NormalFormQ07 = () => {
     </div>
   )
 }
+
+export default NormalFormQ07;

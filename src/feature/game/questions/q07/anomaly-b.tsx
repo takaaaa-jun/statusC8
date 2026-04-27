@@ -87,3 +87,5 @@ export const Q07AnomalyB = () => {
     </div>
   )
 }
+
+export default Q07AnomalyB;
