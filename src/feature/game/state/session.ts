@@ -56,3 +56,8 @@ export function patchGameSession(
   gameSessions.set(sessionId, updatedSession);
   return updatedSession;
 }
+
+// セッションを削除して初期化する
+export function removeGameSession(sessionId: string) {
+  gameSessions.delete(sessionId);
+}
