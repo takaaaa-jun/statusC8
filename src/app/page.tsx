@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import Link from "next/link";
 
 export default function Home() {
   return (
@@ -30,9 +31,11 @@ export default function Home() {
           >
             引き返す
           </Button>
-          <Button className="h-12 min-w-32 rounded-xl bg-neutral-900 text-base font-medium text-white hover:bg-neutral-800">
-            次に進む
-          </Button>
+          <Link href="/game/play">
+            <Button className="h-12 min-w-32 rounded-xl bg-neutral-900 text-base font-medium text-white hover:bg-neutral-800">
+              次に進む
+            </Button>
+          </Link>
         </div>
       </div>
     </main>
