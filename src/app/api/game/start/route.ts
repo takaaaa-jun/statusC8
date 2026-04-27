@@ -2,13 +2,14 @@ import { cookies } from "next/headers";
 
 import { pickNextQuestion } from "@/feature/game/engine/random";
 import {
-  getOrCreateGameSession,
-  patchGameSession,
-  removeGameSession,
+  createInitialSignedGameSession,
+  getSignedSessionId,
+  issueSignedGameSessionToken,
+  readSignedGameSessionToken,
+  SESSION_COOKIE_NAME,
+  updateSignedGameSession,
 } from "@/feature/game/state/session";
 import type { StartGameResponse } from "@/feature/game/types";
-
-const SESSION_COOKIE_NAME = "game_session_id";
 
 export async function GET() {
   // API の使い方を返すヘルスチェック用エンドポイント
@@ -22,13 +23,9 @@ export async function POST(request: Request) {
   const cookieStore = await cookies();
   const { searchParams } = new URL(request.url);
   const shouldReset = searchParams.get("reset") === "1";
-  const sessionIdFromCookie = cookieStore.get(SESSION_COOKIE_NAME)?.value;
+  const tokenFromCookie = cookieStore.get(SESSION_COOKIE_NAME)?.value;
 
   if (shouldReset) {
-    if (sessionIdFromCookie) {
-      removeGameSession(sessionIdFromCookie);
-    }
-
     cookieStore.delete(SESSION_COOKIE_NAME);
 
     return Response.json({
@@ -37,13 +34,14 @@ export async function POST(request: Request) {
     });
   }
 
-  const session = getOrCreateGameSession(sessionIdFromCookie);
+  const session =
+    readSignedGameSessionToken(tokenFromCookie) ?? createInitialSignedGameSession();
 
   // 未使用問題を優先して次の問題を抽選
   const nextQuestion = pickNextQuestion(session.usedQuestionIds);
 
   // 抽選結果をセッションに保存し、現在問題を更新
-  const updatedSession = patchGameSession(session.sessionId, {
+  const updatedSession = updateSignedGameSession(session, {
     usedQuestionIds: nextQuestion.nextUsedQuestionIds,
     currentQuestion: {
       questionId: nextQuestion.questionId,
@@ -52,16 +50,20 @@ export async function POST(request: Request) {
     },
   });
 
-  // 次回アクセス用に sessionId を cookie に保存
-  cookieStore.set(SESSION_COOKIE_NAME, updatedSession.sessionId, {
+  const signedToken = issueSignedGameSessionToken(updatedSession);
+
+  // 次回アクセス用に署名付きトークンを cookie に保存
+  cookieStore.set(SESSION_COOKIE_NAME, signedToken, {
     httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
     sameSite: "lax",
     path: "/",
+    maxAge: 60 * 60 * 6,
   });
 
   // フロント向けの開始レスポンスを組み立て
   const response: StartGameResponse = {
-    sessionId: updatedSession.sessionId,
+    sessionId: getSignedSessionId(signedToken),
     questionId: nextQuestion.questionId,
     variant: nextQuestion.variant,
     usedQuestionIds: updatedSession.usedQuestionIds,
