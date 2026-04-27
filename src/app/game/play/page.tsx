@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 import type { ComponentType } from "react";
 
@@ -99,6 +100,7 @@ const QUESTION_COMPONENTS: Record<
 };
 
 export default function GamePlayPage() {
+  const router = useRouter();
   // API 通信中かどうかを管理する
   const [isLoadingStart, setIsLoadingStart] = useState(false);
   const [isLoadingAnswer, setIsLoadingAnswer] = useState(false);
@@ -194,9 +196,7 @@ export default function GamePlayPage() {
       const answerResult = (await response.json()) as AnswerResponse;
 
       if (answerResult.isGameClear || answerResult.progressCount >= CLEAR_CNT) {
-        window.location.assign(
-          `/game/result?cnt=${answerResult.progressCount}`,
-        );
+        router.replace(`/game/result?cnt=${answerResult.progressCount}`);
         return;
       }
 
@@ -204,9 +204,7 @@ export default function GamePlayPage() {
 
       // cnt は 8 まで表示し、9 到達でクリア扱いにする
       if (nextQuestion && nextQuestion.progressCount >= CLEAR_CNT) {
-        window.location.assign(
-          `/game/result?cnt=${nextQuestion.progressCount}`,
-        );
+        router.replace(`/game/result?cnt=${nextQuestion.progressCount}`);
         return;
       }
     } catch (error) {
