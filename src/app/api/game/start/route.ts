@@ -4,6 +4,7 @@ import { pickNextQuestion } from "@/feature/game/engine/random";
 import {
   getOrCreateGameSession,
   patchGameSession,
+  removeGameSession,
 } from "@/feature/game/state/session";
 import type { StartGameResponse } from "@/feature/game/types";
 
@@ -16,10 +17,26 @@ export async function GET() {
   });
 }
 
-export async function POST() {
+export async function POST(request: Request) {
   // cookie から既存セッションを復元（なければ新規作成）
   const cookieStore = await cookies();
+  const { searchParams } = new URL(request.url);
+  const shouldReset = searchParams.get("reset") === "1";
   const sessionIdFromCookie = cookieStore.get(SESSION_COOKIE_NAME)?.value;
+
+  if (shouldReset) {
+    if (sessionIdFromCookie) {
+      removeGameSession(sessionIdFromCookie);
+    }
+
+    cookieStore.delete(SESSION_COOKIE_NAME);
+
+    return Response.json({
+      ok: true,
+      message: "Session has been reset",
+    });
+  }
+
   const session = getOrCreateGameSession(sessionIdFromCookie);
 
   // 未使用問題を優先して次の問題を抽選

@@ -104,6 +104,7 @@ export default function GamePlayPage() {
   // API 通信中かどうかを管理する
   const [isLoadingStart, setIsLoadingStart] = useState(false);
   const [isLoadingAnswer, setIsLoadingAnswer] = useState(false);
+  const [isResetting, setIsResetting] = useState(false);
   // 画面に出すエラーメッセージ
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
@@ -116,7 +117,7 @@ export default function GamePlayPage() {
   // 問題が表示されているかどうかをまとめて扱う
   const hasQuestion = currentQuestion !== null;
   // start / answer のどちらかが動いている間は操作を止める
-  const isBusy = isLoadingStart || isLoadingAnswer;
+  const isBusy = isLoadingStart || isLoadingAnswer || isResetting;
 
   // questionId と variant から、対応する問題コンポーネントを選ぶ
   const QuestionView = useMemo(() => {
@@ -168,6 +169,32 @@ export default function GamePlayPage() {
   // 最初の開始ボタンからも、回答後の次の問題表示からも使う
   const startGame = async () => {
     await loadNextQuestion();
+  };
+
+  // 現在のセッションをリセットして、開始前の状態に戻す
+  const resetGame = async () => {
+    setIsResetting(true);
+    setErrorMessage(null);
+
+    try {
+      const response = await fetch("/api/game/start?reset=1", {
+        method: "POST",
+      });
+
+      if (!response.ok) {
+        const errorData = (await response.json().catch(() => ({}))) as {
+          message?: string;
+        };
+        throw new Error(errorData.message || "リセットに失敗しました");
+      }
+
+      setCurrentQuestion(null);
+      router.replace("/game/play");
+    } catch (error) {
+      setErrorMessage(error instanceof Error ? error.message : "不明なエラー");
+    } finally {
+      setIsResetting(false);
+    }
   };
 
   // 現在の問題に対する回答をサーバーへ送る
@@ -269,6 +296,17 @@ export default function GamePlayPage() {
               </Button>
             </div>
           )}
+
+          <div className="mt-4 flex justify-center">
+            <Button
+              variant="ghost"
+              className="text-white/80 hover:bg-white/10 hover:text-white"
+              onClick={resetGame}
+              disabled={isBusy}
+            >
+              {isResetting ? "リセット中..." : "最初からやり直す"}
+            </Button>
+          </div>
 
           {/* currentQuestion があるときだけ、実際の問題コンポーネントを描画する */}
           {hasQuestion && (
