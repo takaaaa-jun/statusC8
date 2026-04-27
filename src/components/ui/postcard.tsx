@@ -50,28 +50,28 @@ function PostCard({
           </div>
 
           {/* コンテンツエリア */}
-          <div className="flex flex-col w-full gap-1">
+          <div className="flex flex-col w-full min-w-0 gap-1">
             
             {/* ヘッダー: ユーザー名 / ID / 時間 */}
             <div className="flex items-center justify-between">
-              <div className="flex items-center gap-1.5 leading-none overflow-hidden">
+              <div className="flex items-center gap-1.5 leading-none overflow-hidden text-ellipsis">
                 <span className="font-bold tracking-tight text-[15px] truncate">{userName}</span>
-                <span className="text-sm text-muted-foreground truncate">@{userId}</span>
+                <span className="text-sm text-muted-foreground truncate shrink">@{userId}</span>
                 {badge && (
-                  <div className="rounded-lg w-4 h-4 overflow-hidden">
+                  <div className="rounded-lg w-4 h-4 overflow-hidden shrink-0">
                     <img src={badge} alt="badge" className="h-full w-full object-cover" />
                   </div>
                 )}
-                <span className="text-sm text-muted-foreground whitespace-nowrap">{time}</span>
+                <span className="text-sm text-muted-foreground whitespace-nowrap shrink-0">{time}</span>
               </div>
               
-              <button className="inline-flex h-8 w-8 items-center justify-center rounded-md text-muted-foreground hover:bg-muted hover:text-foreground transition-colors">
+              <button className="shrink-0 inline-flex h-8 w-8 items-center justify-center rounded-md text-muted-foreground hover:bg-muted hover:text-foreground transition-colors">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg>
               </button>
             </div>
 
             {/* 本文 */}
-            <div className="text-[15px] leading-relaxed text-foreground/90 mt-0.5 whitespace-pre-wrap">
+            <div className="text-[15px] leading-relaxed text-foreground/90 mt-0.5 whitespace-pre-wrap break-words">
               {parts.map((part, i) => {
                 if (part.startsWith('#') && part.endsWith(' ')) {
                   return (
