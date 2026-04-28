@@ -316,10 +316,9 @@ export default function GamePlayPage() {
         {/* ゲーム本体の表示エリア */}
         <section className="rounded-2xl border border-white/10 bg-white/5 p-6 shadow-xl">
           <div className="relative text-center">
-            <h1 className="text-3xl font-semibold">Are you ready?</h1>
-            <p className="mt-2 text-sm text-white/70">
+            <h1 className="text-3xl font-semibold">
               異変を見つけたら引き返す。異変がなければ進む。
-            </p>
+            </h1>
           </div>
 
           {!hasQuestion && (
