@@ -284,9 +284,6 @@ export default function GamePlayPage() {
   return (
     <main className="min-h-screen bg-black text-white">
       <aside className="fixed top-4 left-4 z-50 rounded-2xl border-2 border-white bg-black/95 p-3 shadow-[0_10px_30px_rgba(0,0,0,0.5)] backdrop-blur sm:top-6 sm:left-6 sm:p-4">
-        <p className="text-[10px] font-bold tracking-[0.25em] text-white/80 sm:text-xs">
-          CNT
-        </p>
         <div className="mt-1 flex items-end gap-2">
           <span className="font-mono text-3xl leading-none font-black tracking-wider text-white tabular-nums sm:text-4xl">
             {visibleCnt.toString().padStart(2, "0")}
