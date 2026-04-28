@@ -152,6 +152,40 @@ const QUESTION_COMPONENTS: Record<
       },
     ),
   },
+  q07: {
+    normal: dynamic(() => import("@/feature/game/questions/q07/normal"), {
+      loading: QuestionLoading,
+    }),
+    "anomaly-a": dynamic(
+      () => import("@/feature/game/questions/q07/anomaly-a"),
+      {
+        loading: QuestionLoading,
+      },
+    ),
+    "anomaly-b": dynamic(
+      () => import("@/feature/game/questions/q07/anomaly-b"),
+      {
+        loading: QuestionLoading,
+      },
+    ),
+  },
+  q08: {
+    normal: dynamic(() => import("@/feature/game/questions/q08/normal"), {
+      loading: QuestionLoading,
+    }),
+    "anomaly-a": dynamic(
+      () => import("@/feature/game/questions/q08/anomaly-a"),
+      {
+        loading: QuestionLoading,
+      },
+    ),
+    "anomaly-b": dynamic(
+      () => import("@/feature/game/questions/q08/anomaly-b"),
+      {
+        loading: QuestionLoading,
+      },
+    ),
+  },
 };
 
 export default function GamePlayPage() {

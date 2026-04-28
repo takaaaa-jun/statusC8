@@ -12,7 +12,16 @@ if (!SESSION_COOKIE_SECRET && process.env.NODE_ENV === "production") {
 
 const SIGNING_SECRET = SESSION_COOKIE_SECRET ?? "dev-only-secret-change-this";
 
-const QUESTION_IDS: QuestionId[] = ["q01", "q02", "q03", "q04", "q05", "q06"];
+const QUESTION_IDS: QuestionId[] = [
+  "q01",
+  "q02",
+  "q03",
+  "q04",
+  "q05",
+  "q06",
+  "q07",
+  "q08",
+];
 const VARIANTS: Variant[] = ["normal", "anomaly-a", "anomaly-b"];
 
 export const SESSION_COOKIE_NAME = "game_session_token";
