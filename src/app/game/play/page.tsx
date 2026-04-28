@@ -3,9 +3,10 @@
 import Image from "next/image";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import type { ComponentType } from "react";
 
+import { RankingManager } from "@/feature/game/engine/ranking";
 import { Button } from "@/components/ui/button";
 import type {
   AnswerResponse,
@@ -197,6 +198,19 @@ export default function GamePlayPage() {
   // 画面に出すエラーメッセージ
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
+  // タイマー用のState
+  const [elapsed, setElapsed] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      const ms = RankingManager.getElapsedMs();
+      if (ms !== null) {
+        setElapsed(Math.floor(ms / 1000));
+      }
+    }, 100);
+    return () => clearInterval(timer);
+  }, []);
+
   // 現在の問題を保持する
   const [currentQuestion, setCurrentQuestion] =
     useState<StartGameResponse | null>(null);
@@ -242,6 +256,12 @@ export default function GamePlayPage() {
 
   // 最初の開始ボタンからも、回答後の次の問題表示からも使う
   const startGame = async () => {
+    // 初回の「ゲーム開始」ボタンを押したときにタイマーを動かし始める
+    if (!currentQuestion) {
+      const name = RankingManager.getPlayerName();
+      RankingManager.startTimer(name);
+      setElapsed(0);
+    }
     await loadNextQuestion();
   };
 
@@ -249,6 +269,10 @@ export default function GamePlayPage() {
   const resetGame = async () => {
     setIsResetting(true);
     setErrorMessage(null);
+
+    // リセット時にタイマーも停止・消去する
+    RankingManager.clearTimer();
+    setElapsed(0);
 
     try {
       const response = await fetch("/api/game/start?reset=1", {
@@ -336,6 +360,21 @@ export default function GamePlayPage() {
               width: `${Math.min((visibleCnt / VISIBLE_CNT_MAX) * 100, 100)}%`,
             }}
           />
+        </div>
+      </aside>
+
+      {/* タイマー表示 (右上) */}
+      <aside className="fixed top-4 right-4 z-50 rounded-2xl border-2 border-white bg-black/95 p-3 shadow-[0_10px_30px_rgba(0,0,0,0.5)] backdrop-blur sm:top-6 sm:right-6 sm:p-4 min-w-[100px] text-center">
+        <p className="text-[10px] font-bold tracking-[0.25em] text-white/80 sm:text-xs">
+          TIME
+        </p>
+        <div className="mt-1 flex items-end justify-center gap-1">
+          <span className="font-mono text-3xl leading-none font-black tracking-wider text-white tabular-nums sm:text-4xl text-green-400">
+            {elapsed}
+          </span>
+          <span className="mb-0.5 text-xs font-semibold text-white/70 sm:text-sm">
+            s
+          </span>
         </div>
       </aside>
 

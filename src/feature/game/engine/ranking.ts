@@ -6,6 +6,16 @@ export class RankingManager {
     private static NAME_KEY = 'status_c8_player_name';
 
     /**
+     * プレイヤー名のみを保存します（タイマー開始前用）。
+     * @param playerName プレイヤー名
+     */
+    static setPlayerName(playerName: string): void {
+        if (typeof window !== 'undefined') {
+            localStorage.setItem(this.NAME_KEY, playerName);
+        }
+    }
+
+    /**
      * 計測を開始します。
      * @param playerName プレイヤー名
      */
@@ -13,6 +23,15 @@ export class RankingManager {
         if (typeof window !== 'undefined') {
             localStorage.setItem(this.STORAGE_KEY, Date.now().toString());
             localStorage.setItem(this.NAME_KEY, playerName);
+        }
+    }
+
+    /**
+     * 計測状態をリセット（クリア）します。
+     */
+    static clearTimer(): void {
+        if (typeof window !== 'undefined') {
+            localStorage.removeItem(this.STORAGE_KEY);
         }
     }
 

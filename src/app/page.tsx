@@ -1,8 +1,28 @@
+"use client";
+
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import Link from "next/link";
+import { RankingManager } from "@/feature/game/engine/ranking";
 
 export default function Home() {
+  const [playerName, setPlayerName] = useState("");
+  const router = useRouter();
+
+  const handleStart = async () => {
+    RankingManager.setPlayerName(playerName.trim() || "Guest");
+    RankingManager.clearTimer(); // タイマー状態を初期化
+    // ゲームのサーバーサイドセッション（クッキー）をリセットする
+    try {
+      await fetch("/api/game/start?reset=1", { method: "POST" });
+    } catch (error) {
+      console.error(error);
+    }
+    // その後、ゲーム画面へ遷移
+    router.push("/game/play");
+  };
+
   return (
     <main className="relative min-h-screen overflow-hidden bg-neutral-50">
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,#dbeafe_0,transparent_40%),radial-gradient(circle_at_80%_80%,#fee2e2_0,transparent_40%)]" />
@@ -17,6 +37,8 @@ export default function Home() {
           <div className="mx-auto mb-10 w-full max-w-xl">
             <Input
               placeholder="プレイヤー名を入力"
+              value={playerName}
+              onChange={(e) => setPlayerName(e.target.value)}
               className="h-12 rounded-xl border-neutral-300 bg-white text-base shadow-sm"
             />
           </div>
@@ -31,11 +53,12 @@ export default function Home() {
           >
             引き返す
           </Button>
-          <Link href="/game/play">
-            <Button className="h-12 min-w-32 rounded-xl bg-neutral-900 text-base font-medium text-white hover:bg-neutral-800">
-              次に進む
-            </Button>
-          </Link>
+          <Button 
+            className="h-12 min-w-32 rounded-xl bg-neutral-900 text-base font-medium text-white hover:bg-neutral-800"
+            onClick={handleStart}
+          >
+            次に進む
+          </Button>
         </div>
       </div>
     </main>
