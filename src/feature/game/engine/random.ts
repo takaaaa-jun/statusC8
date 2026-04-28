@@ -1,7 +1,16 @@
 import type { PickNextQuestionResult, QuestionId, Variant } from "../types";
 
 // 問題プール（ここを増やすと問題数を増やせる）
-const QUESTION_IDS: QuestionId[] = ["q01", "q02", "q03", "q04", "q05", "q06"];
+const QUESTION_IDS: QuestionId[] = [
+  "q01",
+  "q02",
+  "q03",
+  "q04",
+  "q05",
+  "q06",
+  "q07",
+  "q08",
+];
 
 // バリエーションプール（normal 1 + anomaly 2）
 const VARIANTS: Variant[] = ["normal", "anomaly-a", "anomaly-b"];

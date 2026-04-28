@@ -29,7 +29,7 @@ function PostCard({
   ...props
 }: PostCardProps) {
   // コンポーネント内で分割処理を行う
-  const parts = content.split(/(#[^\s]+\s)/g);
+  const parts = content.split(/(#\S+\s|<br\s*\/?>)/g);
 
   return (
     <div className={cn("", className)} {...props}>
@@ -79,6 +79,9 @@ function PostCard({
                       {part}
                     </span>
                   );
+                }
+                if (/<br\s*\/?>/.test(part)) {
+                  return <br key={i} />;
                 }
                 return part;
               })}

@@ -1,5 +1,5 @@
 // 基本の型
-export type QuestionId = "q01" | "q02" | "q03" | "q04" | "q05" | "q06";
+export type QuestionId = "q01" | "q02" | "q03" | "q04" | "q05" | "q06" | "q07" | "q08";
 export type Variant = "normal" | "anomaly-a" | "anomaly-b";
 export type PlayerAction = "advance" | "turn-back";
 
