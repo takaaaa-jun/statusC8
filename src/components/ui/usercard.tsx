@@ -26,7 +26,7 @@ function UserCard({
   ...props
 }: UserCardProps) {
   return (
-    <div className={cn("w-full min-w-[280px] shrink-0 p-4", className)} {...props}>
+    <div className={cn("w-full  shrink-0 ", className)} {...props}>
       <div className="overflow-hidden rounded-xl border bg-card text-card-foreground shadow-sm">
         {/* ヘッダー画像 */}
         <div className="h-24 w-full bg-muted">

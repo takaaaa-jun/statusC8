@@ -28,7 +28,7 @@ export default function q08(){
             {/* 中央：ロゴ */}
             <div className="flex justify-center">
                 <a href="#">
-                    <img className="" src="/logo-5.png" alt="logo" />
+                    <img className="h-16 translate-y-2" src="/logo.png" alt="logo" />
                 </a>
             </div>
 
@@ -48,8 +48,8 @@ export default function q08(){
         </div>
         </header>
 
-        <div className="flex">
-            <div className="flex w-[20%] hidden md:block w-[30%] shrink-0">
+        <div className="flex py-4 px-4">
+            <div className="w-[28%] hidden md:block shrink-0">
                 <UserCard 
                     userName="ユーザ" 
                     userId="a" 
@@ -62,7 +62,7 @@ export default function q08(){
             </div>
 
             {/* メイン */}
-            <div className="w-[40%] py-4 pr-4">
+            <div className="flex-1 min-w-0 px-4">
                 {/* テキストエリア */}
                 <div className="grid gap-2">
                     <Textarea placeholder="What are you doing now?" className="bg-white"/>
@@ -122,8 +122,8 @@ export default function q08(){
                     />
                 </div>
             </div>
-            <div className="flex-1 py-4 pr-4">
-                <div className="w-full overflow-hidden rounded-xl border border-gray-200">
+            <div className="w-[25%] hidden md:block shrink-0">
+                <div className="overflow-hidden rounded-xl border border-gray-200">
                 <table className="w-full text-left border-separate border-spacing-0">
                     <thead className="bg-white">
                         <tr>
