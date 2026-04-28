@@ -342,9 +342,6 @@ export default function GamePlayPage() {
   return (
     <main className="min-h-screen bg-black text-white">
       <aside className="fixed top-4 left-4 z-50 rounded-2xl border-2 border-white bg-black/95 p-3 shadow-[0_10px_30px_rgba(0,0,0,0.5)] backdrop-blur sm:top-6 sm:left-6 sm:p-4">
-        <p className="text-[10px] font-bold tracking-[0.25em] text-white/80 sm:text-xs">
-          CNT
-        </p>
         <div className="mt-1 flex items-end gap-2">
           <span className="font-mono text-3xl leading-none font-black tracking-wider text-white tabular-nums sm:text-4xl">
             {visibleCnt.toString().padStart(2, "0")}
@@ -392,10 +389,9 @@ export default function GamePlayPage() {
         {/* ゲーム本体の表示エリア */}
         <section className="rounded-2xl border border-white/10 bg-white/5 p-6 shadow-xl">
           <div className="relative text-center">
-            <h1 className="text-3xl font-semibold">Are you ready?</h1>
-            <p className="mt-2 text-sm text-white/70">
+            <h1 className="text-3xl font-semibold">
               異変を見つけたら引き返す。異変がなければ進む。
-            </p>
+            </h1>
           </div>
 
           {!hasQuestion && (
