@@ -48,8 +48,8 @@ export default function q08(){
         </div>
         </header>
 
-        <div className="flex">
-            <div className="flex w-[20%] hidden md:block w-[30%] shrink-0">
+        <div className="flex py-4 px-4">
+            <div className="w-[28%] hidden md:block shrink-0">
                 <UserCard 
                     userName="ユーザ" 
                     userId="a" 
@@ -62,7 +62,7 @@ export default function q08(){
             </div>
 
             {/* メイン */}
-            <div className="w-[40%] py-4 pr-4">
+            <div className="flex-1 min-w-0 px-4">
                 {/* テキストエリア */}
                 <div className="grid gap-2">
                     <Textarea placeholder="What are you doing now?" className="bg-white"/>
@@ -101,8 +101,7 @@ export default function q08(){
                     userId="nemui_zzz_99"
                     badge = "/badge.png"
                     time="15分"
-                    content="今日は晴れですね
-                    晴れといえば僕の誕生日は来月だけど君はお肉が好き？"
+                    content="今日は晴れですね<br>晴れといえば僕の誕生日は来月だけど君はお肉が好き？"
                     iconUrl="/icon03.jpg"
                     replies = "1"
                     reposts = "2"
@@ -123,8 +122,8 @@ export default function q08(){
                     />
                 </div>
             </div>
-            <div className="flex-1 py-4 pr-4">
-                <div className="w-full overflow-hidden rounded-xl border border-gray-200">
+            <div className="w-[25%] hidden md:block shrink-0">
+                <div className="overflow-hidden rounded-xl border border-gray-200">
                 <table className="w-full text-left border-separate border-spacing-0">
                     <thead className="bg-white">
                         <tr>
